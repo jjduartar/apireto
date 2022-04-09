@@ -5,7 +5,7 @@ from flask_cors import CORS
 import controller
 
 app = Flask(__name__)
-CORS(_____)
+CORS(app)
 
 @app.route('/')
 def hello_world():
@@ -32,13 +32,13 @@ def preRLinea():
 def getItem_():
     if request.method == 'POST':
         data = request.get_json()
-        print(_____)
+        print(data)
         item = data['item']
         return controller.getItem(item)
     return
 
 @app.route('/itemsearch', methods=['POST'])
-def _____():
+def getSearchItem():
     if request.method == 'POST':
         data = request.get_json()
         print(data)
@@ -46,7 +46,7 @@ def _____():
         response = make_response(controller.getSearchItem(item))
         response.mimetype = 'application/json'
         response.status_code = 200
-    return _____
+    return response
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=_____, debug=True)
+    app.run(host="0.0.0.0", port="3000", debug=True)

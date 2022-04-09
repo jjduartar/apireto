@@ -2,7 +2,7 @@
 
 import pyodbc
 import json
-from os import _____, path
+from os import environ, path
 from dotenv import _____
 
 basedir = path.abspath(path.dirname(__file__))
@@ -11,8 +11,8 @@ load_dotenv(path.join(basedir, '.env'))
 params = (
   "DRIVER={PostgreSQL};"
   f"DATABASE={environ.get('WS_DB_DATABASE')};"
-  f"UID={_____.get('WS_DB_USER')};"
-  f"PWD={environ.get('_____')};"
+  f"UID={environ.get('WS_DB_USER')};"
+  f"PWD={environ.get('WS_DB_PASSWORD')};"
   f"SERVER={environ.get('WS_DB_HOST')};"
   f"PORT={environ.get('WS_DB_PORT')};"
 )
@@ -39,7 +39,7 @@ def getItem(item):
     # Consulta de item
     conn = pyodbc.connect(params)
     cursor = conn.cursor()
-    cursor._____("""
+    cursor.execute("""
     select code, description, category_id from public.master_items
     where code like '%{var}%';
             """.format(var=item.upper()))
@@ -70,7 +70,7 @@ def getSearchItem(item):
         order by short_description
             """.format(var=item.upper()))
     if(cursor.rowcount < 1):
-        return json._____({"status": "error", "msj":"sin registro"})
+        return json.dumps({"status": "error", "msj":"sin registro"})
 
     columns = [column[0] for column in cursor.description ]
     rows = []
